@@ -18,26 +18,26 @@ Or install it yourself as:
 
 ## Usage
 
-username = ""
-password = ""
-license = ""
-options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
+    username = ""
+    password = ""
+    license = ""
+    options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
         :address_line=>"New york",:city=>"New york",
         :company_name=>"Broadway Avenue",:contact_name=>"Amar",:state=>"NY",:country_code=>"US",
         :phone_number=>"212-632-3975",:pickup_date=>"20120830",
         :close_time =>"1630",:ready_time=> "0800",:service_code=>"001",
         :weight=>"42.0",:postal_code=>"10020",:account_number=>"243AV3",:payment_method=>"01" 
-   }
+    }
 
 
-u = UpsPickup::PickupCreation.new(username,password,license,options)
-u.commit
+    u = UpsPickup::PickupCreation.new(username,password,license,options)
+    u.commit
 
-# Generate Response if success or it's fault then generate pickup response 
-u.generate_response
+    # Generate Response if success or it's fault then generate pickup response 
+    u.generate_response
 
-u.response return object which has prn,and rate_status,success_code
-u.error if any error return object which has severity,and error_code,description
+    u.response return object which has prn,and rate_status,success_code
+    u.error if any error return object which has severity,and error_code,description
 
 ## Contributing
 
