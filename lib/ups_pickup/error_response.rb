@@ -7,9 +7,9 @@ module UpsPickup
     def initialize(response)
       response_hash = response.to_hash
 
-      @severity = deep_find(response_hash,:severity)
-      @error_code = deep_find(response_hash,:code)
-      @description =deep_find(response_hash,:description)
+      @severity = response_hash.deep_fetch(:severity)
+      @error_code = response_hash.deep_fetch(:code)
+      @description =response_hash.deep_fetch(:description)
     end
 
     
