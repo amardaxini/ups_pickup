@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UPS Pickup Service WSDL Release Date Jan, 2010 -->
+<!-- Last update: 10/16/2009 -->
+<!-- Publish to External Clients only-->
+<!-- Copyright 2007-2010 United Parcel Service of America, Inc. All rights reserved.   -->
+<wsdl:definitions name="Pickup" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:pkup="http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1" xmlns="http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1" xmlns:tns="http://www.ups.com/WSDL/XOLTWS/Pickup/v1.1" targetNamespace="http://www.ups.com/WSDL/XOLTWS/Pickup/v1.1">
+	<wsdl:types>
+		<xsd:schema>
+			<!-- This schema defines the UPS Security header used for authorization purposes -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" schemaLocation="UPSSecurity.xsd"/>
+			<!--  This schema defines the error detail data types returned within SOAPFaults to provide more specific information pertaining to the problem. -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" schemaLocation="Error1.1.xsd"/>
+			<!-- ################## Start Pickup Specific schema  ################### -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1" schemaLocation="PickupWebServiceSchema.xsd"/>
+			<!-- ################## End Pickup specific schema ##################### -->
+		</xsd:schema>
+	</wsdl:types>
+	<!-- ########### Start All four set of Messages definition ###########-->
+	<wsdl:message name="PickupCreationRequestMessage">
+		<wsdl:part name="Body" element="pkup:PickupCreationRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PickupCreationResponseMessage">
+		<wsdl:part name="Body" element="pkup:PickupCreationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PickupCreationErrorMessage">
+		<wsdl:part name="PickupCreationError" element="error:Errors"/>
+	</wsdl:message>
+	<!-- ###########-->
+	<wsdl:message name="PickupRateRequestMessage">
+		<wsdl:part name="Body" element="pkup:PickupRateRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PickupRateResponseMessage">
+		<wsdl:part name="Body" element="pkup:PickupRateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PickupRateErrorMessage">
+		<wsdl:part name="PickupRateError" element="error:Errors"/>
+	</wsdl:message>
+	<!-- ###########-->
+	<wsdl:message name="PickupCancelRequestMessage">
+		<wsdl:part name="Body" element="pkup:PickupCancelRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PickupCancelResponseMessage">
+		<wsdl:part name="Body" element="pkup:PickupCancelResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PickupCancelErrorMessage">
+		<wsdl:part name="PickupCancelError" element="error:Errors"/>
+	</wsdl:message>
+	<!-- ###########-->
+	<wsdl:message name="PickupPendingStatusRequestMessage">
+		<wsdl:part name="Body" element="pkup:PickupPendingStatusRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PickupPendingStatusResponseMessage">
+		<wsdl:part name="Body" element="pkup:PickupPendingStatusResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PickupPendingStatusErrorMessage">
+		<wsdl:part name="PickupPendingStatusError" element="error:Errors"/>
+	</wsdl:message>
+	<!-- ########### End All Six Set of Messages ###########-->
+	<wsdl:portType name="PickupPortType">
+		<wsdl:operation name="ProcessPickupCreation">
+			<wsdl:input name="PickupCreationRequest" message="tns:PickupCreationRequestMessage"/>
+			<wsdl:output name="PickupCreationResponse" message="tns:PickupCreationResponseMessage"/>
+			<wsdl:fault name="PickupCreationError" message="tns:PickupCreationErrorMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessPickupRate">
+			<wsdl:input name="PickupRateRequest" message="tns:PickupRateRequestMessage"/>
+			<wsdl:output name="PickupRateResponse" message="tns:PickupRateResponseMessage"/>
+			<wsdl:fault name="PickupRateError" message="tns:PickupRateErrorMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessPickupCancel">
+			<wsdl:input name="PickupCancelRequest" message="tns:PickupCancelRequestMessage"/>
+			<wsdl:output name="PickupCancelResponse" message="tns:PickupCancelResponseMessage"/>
+			<wsdl:fault name="PickupCancelError" message="tns:PickupCancelErrorMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessPickupPendingStatus">
+			<wsdl:input name="PickupPendingStatusRequest" message="tns:PickupPendingStatusRequestMessage"/>
+			<wsdl:output name="PickupPendingStatusResponse" message="tns:PickupPendingStatusResponseMessage"/>
+			<wsdl:fault name="PickupPendingStatusError" message="tns:PickupPendingStatusErrorMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<!-- ########### End Port Type ########### -->
+	<wsdl:binding name="PickupBinding" type="tns:PickupPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<!-- ###########-->
+		<wsdl:operation name="ProcessPickupCreation">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PickupBinding/v1.1" style="document"/>
+			<wsdl:input name="PickupCreationRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PickupCreationRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PickupCreationErrorMessage" part="PickupCreationError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PickupCreationResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PickupCreationError">
+				<soap:fault name="PickupCreationError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<!-- ###########-->
+		<wsdl:operation name="ProcessPickupRate">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PickupBinding/v1.1" style="document"/>
+			<wsdl:input name="PickupRateRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PickupRateRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PickupRateErrorMessage" part="PickupRateError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PickupRateResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PickupRateError">
+				<soap:fault name="PickupRateError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<!-- ###########-->
+		<wsdl:operation name="ProcessPickupCancel">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PickupBinding/v1.1" style="document"/>
+			<wsdl:input name="PickupCancelRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PickupCancelRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PickupCancelErrorMessage" part="PickupCancelError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PickupCancelResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PickupCancelError">
+				<soap:fault name="PickupCancelError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<!-- ###########-->
+		<wsdl:operation name="ProcessPickupPendingStatus">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PickupBinding/v1.1" style="document"/>
+			<wsdl:input name="PickupPendingStatusRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PickupPendingStatusRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PickupPendingStatusErrorMessage" part="PickupPendingStatusError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PickupPendingStatusResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PickupPendingStatusError">
+				<soap:fault name="PickupPendingStatusError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<!-- ########### End Binding ###########-->
+	<wsdl:service name="PickupService">
+		<wsdl:port name="PickupPort" binding="tns:PickupBinding">
+			<!-- Production URL -->
+			<!--<soap:address location="https://onlinetools.ups.com/webservices/Pickup"/>-->
+			<!-- CIE URL ( Customer Integration Environment )-->
+			<soap:address location="https://wwwcie.ups.com/webservices/Pickup"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

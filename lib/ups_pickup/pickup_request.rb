@@ -1,0 +1,57 @@
+
+module UpsPickup
+  class PickupRequest 
+    LIVE_URL = "https://onlinetools.ups.com/webservices/Pickup"
+    TEST_URL= "https://wwwcie.ups.com/webservices/Pickup"
+    include HTTParty
+    base_uri LIVE_URL
+    attr_accessor  :user_name,:password,:license,:options,:client
+    def initialize(user_name, password, license, options={})
+      @user_name,@password,@license,@options = user_name,password,license,options  
+      @client=Savon::Client.new(File.expand_path("../schema/Pickup.wsdl", __FILE__))
+      @request_body = {}
+      set_wsdl_endpoint
+      set_soap_namespace
+       if (options[:test])
+        self.class.base_uri TEST_URL
+      end
+    
+      
+    end
+
+    
+    # For Test environment set test url
+    def set_wsdl_endpoint
+      if @options[:test] == true
+       @client.wsdl.endpoint = TEST_URL
+      else 
+        @client.wsdl.endpoint = LIVE_URL
+      end   
+    end
+    # Set name space
+    # ns2 for pickup 
+    def set_soap_namespace
+    
+      # @client.wsdl.namespaces["xmlns:ns2"] = "http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1"
+      # @client.wsdl.namespaces["xmlns:ns3"] = "http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0"
+    end
+
+    #Set security passed in client request block
+    def access_request
+     {   
+      "ns3:UPSSecurity" => {
+        "ns3:UsernameToken"=>{
+          "ns3:Username"=>@user_name,
+          "ns3:Password" => @password
+        },
+        "ns3:ServiceAccessToken"=>{
+          "ns3:AccessLicenseNumber"=> @license
+        }
+        }
+      } 
+    end
+    
+  end
+end
+
+# pickup = Ups::PickupRequest.new("contego.mtaylor","C0nt3g0!","6C82D38E41F9C600")
