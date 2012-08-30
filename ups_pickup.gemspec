@@ -14,5 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "ups_pickup"
   gem.require_paths = ["lib"]
   gem.version       = UpsPickup::VERSION
+  gem.add_dependency('httparty')
   gem.add_dependency('savon', '>= 1.1.0')
+
 end

@@ -8,12 +8,14 @@ module UpsPickup
     attr_accessor  :user_name,:password,:license,:options,:client
     def initialize(user_name, password, license, options={})
       @user_name,@password,@license,@options = user_name,password,license,options  
-      @client=Savon::Client.new(File.expand_path("../schema/Pickup.wsdl", __FILE__))
+      @client=Savon::Client.new(File.expand_path("../../schema/Pickup.wsdl", __FILE__))
       @request_body = {}
       set_wsdl_endpoint
       set_soap_namespace
-       if (options[:test])
+      if (options[:test] == true)
         self.class.base_uri TEST_URL
+      elsif options[:url] && [LIVE_URL,TEST_URL].include?(options[:url])
+        self.class.base_uri options[:url]
       end
     
       

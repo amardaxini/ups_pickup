@@ -21,7 +21,7 @@ Or install it yourself as:
 username = ""
 password = ""
 license = ""
-options= {:test=>true,
+options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
         :address_line=>"New york",:city=>"New york",
         :company_name=>"Broadway Avenue",:contact_name=>"Amar",:state=>"NY",:country_code=>"US",
         :phone_number=>"212-632-3975",:pickup_date=>"20120830",
@@ -36,6 +36,8 @@ u.commit
 # Generate Response if success or it's fault then generate pickup response 
 u.generate_response
 
+u.response return object which has prn,and rate_status,success_code
+u.error if any error return object which has severity,and error_code,description
 
 ## Contributing
 

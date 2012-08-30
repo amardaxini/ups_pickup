@@ -1,4 +1,4 @@
-module Ups
+module UpsPickup
   class Shipper
     attr_accessor :account_number,:account_country_code,:card_hoder_name,:card_type,:card_number
     attr_accessor :expiration_date,:security_code,:card_address,:payment_method
@@ -18,7 +18,7 @@ module Ups
       @card_number = options[:card_number]
       @expiration_date = options[:expiration_date]
       @security_code = options[:security_code]
-      @card_address = Ups::Address.new(options[:card_address])
+      @card_address = UpsPickup::Address.new(options[:card_address])
       #TODO raise an exception for payment method
       @payment_method = options[:payment_method] if !options[:payment_method].nil? && [0,1,2,3,4,5].include?(options[:payment_method].to_i)
       @payment_method ||="00"

@@ -1,6 +1,7 @@
+require 'ups_pickup/util'
 module UpsPickup
   class ErrorResponse
-    include UpsPickup::Util
+    include Util
     attr_accessor :error_code,:severity,:description
     # currently building for error 
     def initialize(response)

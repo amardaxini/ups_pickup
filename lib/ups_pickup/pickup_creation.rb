@@ -1,4 +1,4 @@
-
+require 'ups_pickup/util'
 module UpsPickup
   class PickupCreation < PickupRequest
     include Util
