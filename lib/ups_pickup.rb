@@ -10,8 +10,8 @@ require "ups_pickup/fault_response"
 require "ups_pickup/pickup_creation"
 require "ups_pickup/pickup_creation_success"
 require "ups_pickup/pickup_piece"
-
-
+require "ups_pickup/pickup_cancel"
+require "ups_pickup/pickup_cancel_success"
 
 module UpsPickup
   # Your code goes here...

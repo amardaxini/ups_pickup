@@ -33,6 +33,7 @@ module UpsPickup
       rescue Savon::Error => error
         @client_response = error   
       end  
+      build_response
     end
     def build_response
       if success?

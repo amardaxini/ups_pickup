@@ -125,10 +125,10 @@ module UpsPickup
       rescue Savon::Error => error
         @clien_response = error   
       end  
-      
+      build_response
     end
 
-    def generate_response
+    def build_response
       if success?
         @response = UpsPickup::PickupCreationSuccess.new(@client_response) 
       elsif soap_fault?

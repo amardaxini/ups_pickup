@@ -35,20 +35,14 @@ Or install it yourself as:
     u = UpsPickup::PickupCreation.new(username,password,license,options)
     u.commit
 
-    # Build Response 
-    u.build_response
 
 
-    u.response #return object which has prn,and rate_status,success_code
-    u.error    # if any error return object which has severity,and error_code,description
+    u.response #return object which has prn,and rate_status,success_code if it's success
+    u.error    # if any error return object which has severity,and error_code,description if it's fail
 
     #Ups Pickup Cancel
     options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
                :prn=>"PRN NO",:cancel_by=>"02"}     
-
-    # Build Response 
-    u.build_response
-
 
     u.response 
     u.error    
