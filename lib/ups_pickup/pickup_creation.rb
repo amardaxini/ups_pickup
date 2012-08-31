@@ -2,7 +2,7 @@ require 'ups_pickup/util'
 module UpsPickup
   class PickupCreation < PickupRequest
     include Util
-    attr_accessor  :client_response,:response,:error
+    attr_accessor  :response,:error
     def initialize(user_name, password, license, options={})
       super(user_name, password, license, options)  
       @rate_pickup_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
@@ -137,17 +137,7 @@ module UpsPickup
       end  
     end
     
-    def soap_fault?
-      @client_response.is_a?(Savon::SOAP::Fault)
-    end
-
-    def http_error?
-      @client_response.is_a?(Savon::Error)
-    end
-
-    def success?
-      @client_response.is_a?(Savon::SOAP::Response)
-    end
+    
 
   end
 end

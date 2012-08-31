@@ -21,6 +21,8 @@ Or install it yourself as:
     username = ""
     password = ""
     license = ""
+
+    # Ups Pickup creation
     options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
         :address_line=>"New york",:city=>"New york",
         :company_name=>"Broadway Avenue",:contact_name=>"Amar",:state=>"NY",:country_code=>"US",
@@ -33,11 +35,29 @@ Or install it yourself as:
     u = UpsPickup::PickupCreation.new(username,password,license,options)
     u.commit
 
-    # Generate Response if success or it's fault then generate pickup response 
-    u.generate_response
+    # Build Response 
+    u.build_response
 
-    u.response return object which has prn,and rate_status,success_code
-    u.error if any error return object which has severity,and error_code,description
+
+    u.response #return object which has prn,and rate_status,success_code
+    u.error    # if any error return object which has severity,and error_code,description
+
+    #Ups Pickup Cancel
+    options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
+               :prn=>"PRN NO",:cancel_by=>"02"}     
+
+    # Build Response 
+    u.build_response
+
+
+    u.response 
+    u.error    
+
+    # Find out success or fault
+    u.success?
+    u.soap_fault?
+    u.http_error?
+
 
 ## Contributing
 

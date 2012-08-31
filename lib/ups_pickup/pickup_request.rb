@@ -5,7 +5,7 @@ module UpsPickup
     TEST_URL= "https://wwwcie.ups.com/webservices/Pickup"
     include HTTParty
     base_uri LIVE_URL
-    attr_accessor  :user_name,:password,:license,:options,:client
+    attr_accessor  :user_name,:password,:license,:options,:client,:client_response,:response,:error
     def initialize(user_name, password, license, options={})
       @user_name,@password,@license,@options = user_name,password,license,options  
       @client=Savon::Client.new(File.expand_path("../../schema/Pickup.wsdl", __FILE__))
@@ -52,7 +52,17 @@ module UpsPickup
         }
       } 
     end
-    
+    def soap_fault?
+      @client_response.is_a?(Savon::SOAP::Fault)
+    end
+
+    def http_error?
+      @client_response.is_a?(Savon::Error)
+    end
+
+    def success?
+      @client_response.is_a?(Savon::SOAP::Response)
+    end
   end
 end
 

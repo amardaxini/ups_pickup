@@ -23,12 +23,19 @@ module UpsPickup
 
 end
 class Hash
- def deep_fetch(key, default = nil)
-   default = yield if block_given?
-   (deep_find(key) or default) or nil
- end
+  def deep_fetch(key, default = nil)
+    default = yield if block_given?
+    (deep_find(key) or default) or nil
+  end
 
- def deep_find(key)
-    key?(key) ? self[key] : self.values.inject(nil) {|memo, v| memo ||= v.deep_find(key) if v.respond_to?(:deep_find) }
+  def deep_find(key)
+    if key?(key)
+      self[key]
+    else  
+      self.values.inject(nil) do |memo, v|             
+        memo = v.deep_find(key) if v.respond_to?(:deep_find)       
+        memo unless memo.nil?  
+      end 
+    end     
   end
 end
