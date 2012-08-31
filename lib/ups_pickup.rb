@@ -1,4 +1,4 @@
-require 'pry'
+
 require 'savon'
 require 'httparty'
 require "ups_pickup/version"
