@@ -79,11 +79,8 @@ module UpsPickup
     def set_undelivered_email
       @undelivered_email
     end
+
     def build_request
-      build_common_requet
-    end
-  
-    def build_common_requet
       {
         "ns2:Request"=>{
         "ns2:RequestOption"=>"1"
@@ -108,6 +105,7 @@ module UpsPickup
         }
       }
     end
+
     def commit
       begin
         @client_response = @client.request  :ns2,"PickupCreationRequest" do
@@ -118,7 +116,7 @@ module UpsPickup
           soap.namespaces["xmlns:ns2"] = "http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1"
         #  soap.header = SOAP_HEADER1
           soap.header = access_request
-          soap.body = build_common_requet
+          soap.body = build_request
         end
       rescue Savon::SOAP::Fault => fault
         @client_response = fault

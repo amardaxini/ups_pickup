@@ -13,9 +13,11 @@ module UpsPickup
         "ns2:PRN"=>@prn
       }
     end
-    def build_common_request
+    
+    def build_request
       self.to_ups_hash
     end
+
     def commit
       begin
         @client_response = @client.request  :ns2,"PickupCancelRequest" do
@@ -26,7 +28,7 @@ module UpsPickup
           soap.namespaces["xmlns:ns2"] = "http://www.ups.com/XMLSchema/XOLTWS/Pickup/v1.1"
         #  soap.header = SOAP_HEADER1
           soap.header = access_request
-          soap.body = build_common_request
+          soap.body = build_request
         end
       rescue Savon::SOAP::Fault => fault
         @client_response = fault
@@ -35,6 +37,7 @@ module UpsPickup
       end  
       build_response
     end
+
     def build_response
       if success?
         @response = UpsPickup::PickupCancelSuccess.new(@client_response) 

@@ -31,7 +31,6 @@ Or install it yourself as:
         :weight=>"42.0",:postal_code=>"10020",:account_number=>"243AV3",:payment_method=>"01" 
     }
 
-
     u = UpsPickup::PickupCreation.new(username,password,license,options)
     u.commit
     u.response #return object which has prn,and rate_status,success_code if it's success
@@ -39,7 +38,10 @@ Or install it yourself as:
 
     #Ups Pickup Cancel
     options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
-               :prn=>"PRN NO",:cancel_by=>"02"}     
+               :prn=>"PRN NO",:cancel_by=>"02"}    
+
+    u = UpsPickup::PickupCancel.new(username,password,license,options)
+    u.commit            
     u.response 
     u.error    
 
