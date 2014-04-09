@@ -108,7 +108,7 @@ module UpsPickup
 
     def commit
       begin
-        @client_response = @client.request  :ns2,"PickupCreationRequest" do
+        @client_response = @client.call  :ns2,"PickupCreationRequest" do
           #soap.namespaces["xmlns:S"] = "http://schemas.xmlsoap.org/soap/envelope/"
           #soap.namespaces["xmlns:upss"] = "http://www.ups.com/XMLschema/XOLTWS/UPSS/v1.0"
           #soap.namespaces["xmlns:ns1"] = "http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
@@ -118,7 +118,7 @@ module UpsPickup
           soap.header = access_request
           soap.body = build_request
         end
-      rescue Savon::SOAP::Fault => fault
+      rescue Savon::SOAPFault => fault
         @client_response = fault
       rescue Savon::Error => error
         @clien_response = error   
