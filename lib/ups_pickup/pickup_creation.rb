@@ -1,10 +1,12 @@
 require 'ups_pickup/util'
+require 'byebug'
 module UpsPickup
   class PickupCreation < PickupRequest
     include Util
     attr_accessor  :response,:error
     def initialize(user_name, password, license, options={})
-      super(user_name, password, license, options)  
+      super(user_name, password, license, options) 
+      byebug 
       @rate_pickup_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
       # iF any one packge is above 70lbs or 32 kg then its true
       @over_weight_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
