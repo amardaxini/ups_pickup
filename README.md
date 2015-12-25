@@ -1,12 +1,12 @@
 # UpsPickup
 
-UPS Pickup Request API
+Fork: UPS Pickup Request API
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'ups_pickup'
+    gem 'ups_pickup', git: "https://github.com/brovikov/ups_pickup"
 
 And then execute:
 
