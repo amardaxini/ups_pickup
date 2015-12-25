@@ -130,6 +130,7 @@ module UpsPickup
     def build_response
       if success?
         @response = UpsPickup::PickupCreationSuccess.new(@client_response) 
+        self.grand_total_of_all_charge = @response.grand_total_of_all_charge
       elsif soap_fault?
         fault_response = UpsPickup::FaultResponse.new(@client,@client_response)
         @error = UpsPickup::ErrorResponse.new(fault_response.response)
