@@ -8,9 +8,8 @@ module UpsPickup
     attr_accessor  :user_name,:password,:license,:options,:client,:client_response,:response,:error,:grand_total_of_all_charge
     def initialize(user_name, password, license, options={})
       @user_name,@password,@license,@options = user_name,password,license,options  
-      @client=Savon::Client.new(File.expand_path("../../schema/Pickup.wsdl", __FILE__))
+      @client=Savon.client(endpoint: wsdl_endpoint, wsdl: File.expand_path("../../schema/Pickup.wsdl", __FILE__))
       @request_body = {}
-      set_wsdl_endpoint
       set_soap_namespace
       if (options[:test] == true)
         self.class.base_uri TEST_URL
@@ -23,11 +22,11 @@ module UpsPickup
 
     
     # For Test environment set test url
-    def set_wsdl_endpoint
+    def wsdl_endpoint
       if @options[:test] == true
-       @client.wsdl.endpoint = TEST_URL
+       TEST_URL
       else 
-        @client.wsdl.endpoint = LIVE_URL
+        LIVE_URL
       end   
     end
     # Set name space
@@ -53,7 +52,7 @@ module UpsPickup
       } 
     end
     def soap_fault?
-      @client_response.is_a?(Savon::SOAP::Fault)
+      @client_response.is_a?(Savon::SOAPFault)
     end
 
     def http_error?
@@ -61,7 +60,7 @@ module UpsPickup
     end
 
     def success?
-      @client_response.is_a?(Savon::SOAP::Response)
+      @client_response.is_a?(Savon::Response)
     end
   end
 end
