@@ -1,10 +1,11 @@
 require 'ups_pickup/util'
+require 'byebug'
 module UpsPickup
   class PickupCreation < PickupRequest
     include Util
     attr_accessor  :response,:error
     def initialize(user_name, password, license, options={})
-      super(user_name, password, license, options)  
+      super(user_name, password, license, options) 
       @rate_pickup_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
       # iF any one packge is above 70lbs or 32 kg then its true
       @over_weight_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
@@ -108,7 +109,7 @@ module UpsPickup
 
     def commit
       begin
-        @client_response = @client.request  :ns2,"PickupCreationRequest" do
+        @client_response = @client.call  :ns2,"PickupCreationRequest" do
           #soap.namespaces["xmlns:S"] = "http://schemas.xmlsoap.org/soap/envelope/"
           #soap.namespaces["xmlns:upss"] = "http://www.ups.com/XMLschema/XOLTWS/UPSS/v1.0"
           #soap.namespaces["xmlns:ns1"] = "http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
@@ -118,7 +119,7 @@ module UpsPickup
           soap.header = access_request
           soap.body = build_request
         end
-      rescue Savon::SOAP::Fault => fault
+      rescue Savon::SOAPFault => fault
         @client_response = fault
       rescue Savon::Error => error
         @clien_response = error   
@@ -129,6 +130,7 @@ module UpsPickup
     def build_response
       if success?
         @response = UpsPickup::PickupCreationSuccess.new(@client_response) 
+        self.grand_total_of_all_charge = @response.grand_total_of_all_charge
       elsif soap_fault?
         fault_response = UpsPickup::FaultResponse.new(@client,@client_response)
         @error = UpsPickup::ErrorResponse.new(fault_response.response)

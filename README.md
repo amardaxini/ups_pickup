@@ -34,7 +34,14 @@ Or install it yourself as:
     u = UpsPickup::PickupCreation.new(username,password,license,options)
     u.commit
     u.response #return object which has prn,and rate_status,success_code if it's success
+    u.grand_total_of_all_charge # Return grand total of all charges
     u.error    # if any error return object which has severity,and error_code,description if it's fail
+
+    u = UpsPickup::PickupRates.new(username,password,license,options)
+    u.commit
+    u.response #return object which has rate_status,success_code if it's success
+    u.grand_total_of_all_charge 
+    u.error    
 
     #Ups Pickup Cancel
     options= {:url=>("https://onlinetools.ups.com/webservices/Pickup" or "https://wwwcie.ups.com/webservices/Pickup"),
