@@ -13,8 +13,9 @@ module UpsPickup
       @pickup_address = UpsPickup::PickupAddress.new(options)
       @shipper = UpsPickup::Shipper.new(options)
       @alternate_address_indicator = @options[:alternate_address_indicator].nil? ? "N" : @options[:alternate_address_indicator]
-      @tracking_data = set_tracking_data
+      @tracking_data = []
       @pickup_pieces = set_pickup_piece
+      set_tracking_data
       set_weight
       set_pickup_date_info
       set_payment_method
@@ -126,7 +127,7 @@ module UpsPickup
         "ns2:Notfication"=>{
           "ns2:ConfirmationEmailAddress"=>@confirmation_email_address
         },
-        "ns2:TrackingData"=>@tracking_data
+        "ns2:TrackingData"=>tracking_data_ups_hash
       }
     end
 
