@@ -1,20 +1,21 @@
 require 'ups_pickup/util'
-require 'byebug'
 module UpsPickup
   class PickupCreation < PickupRequest
     include Util
     attr_accessor  :response,:error
     def initialize(user_name, password, license, options={})
-      super(user_name, password, license, options) 
-      @rate_pickup_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
+      super(user_name, password, license, options)
+      @rate_pickup_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator])
       # iF any one packge is above 70lbs or 32 kg then its true
-      @over_weight_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator]) 
+      @over_weight_indicator = set_yes_or_no_option(@options[:rate_pickup_indicator])
       @reference_number = @options[:reference_number]
       @special_instruction = @options[:special_instruction]
       @pickup_address = UpsPickup::PickupAddress.new(options)
       @shipper = UpsPickup::Shipper.new(options)
-      @alternate_address_indicator = @options[:alternate_address_indicator].nil? ? "N" : @options[:alternate_address_indicator] 
+      @alternate_address_indicator = @options[:alternate_address_indicator].nil? ? "N" : @options[:alternate_address_indicator]
+      @tracking_data = []
       @pickup_pieces = set_pickup_piece
+      set_tracking_data
       set_weight
       set_pickup_date_info
       set_payment_method
@@ -32,21 +33,43 @@ module UpsPickup
             @pickup_pieces << Ups::PickupPiece.new(pp)
           end
         elsif @options[:pickup_piece].is_a?(Hash)
-          @pickup_pieces =[UpsPickup::PickupPiece.new(@options[:pickup_piece])]  
+          @pickup_pieces =[UpsPickup::PickupPiece.new(@options[:pickup_piece])]
         end
       else
-        @pickup_pieces =[UpsPickup::PickupPiece.new(@options)]    
+        @pickup_pieces =[UpsPickup::PickupPiece.new(@options)]
       end
-    end   
+    end
+
     def pickup_piece_ups_hash
       pickup_hashes = []
       if @pickup_pieces
         @pickup_pieces.flatten.each do |pp|
-        
+
           pickup_hashes<< [pp.to_ups_hash]
-        end 
+        end
       end
       pickup_hashes.flatten
+    end
+
+    def set_tracking_data
+      if @options[:tracking_data].is_a?(Array)
+        @options[:tracking_data].each do |tracking_number|
+          @tracking_data << UpsPickup::TrackingData.new(tracking_number)
+        end
+      else
+        @tracking_data = []
+      end
+    end
+
+    def tracking_data_ups_hash
+      tracking_hashes = []
+      if @tracking_data
+        @tracking_data.flatten.each do |tracking_number|
+
+          tracking_hashes << [tracking_number.to_ups_hash]
+        end
+      end
+      tracking_hashes.flatten
     end
 
     def set_weight
@@ -60,17 +83,17 @@ module UpsPickup
       @ready_time = @options[:ready_time]
       @pickup_date = Date.parse(@options[:pickup_date]).strftime("%Y%m%d")
     end
-    # The payment method to pay for this on call pickup. 
+    # The payment method to pay for this on call pickup.
     #  00 = No payment needed
     #  01 = Pay by shipper account
     #  03 = Pay by charge card
     #  04 = Pay by tracking number
-    #  05 = Pay by check or money order 
+    #  05 = Pay by check or money order
     def set_payment_method
       @payment_method = options[:payment_method] if !options[:payment_method].nil? && [0,1,2,3,4,5].include?(options[:payment_method].to_i)
       @payment_method ||="00"
     end
-    
+
     # it might be an array of email address or single email address
     # max allowed limit is 5
     def set_notification
@@ -103,7 +126,8 @@ module UpsPickup
         "ns2:ReferenceNumber"=>@reference_number,
         "ns2:Notfication"=>{
           "ns2:ConfirmationEmailAddress"=>@confirmation_email_address
-        }
+        },
+        "ns2:TrackingData"=>tracking_data_ups_hash
       }
     end
 
@@ -122,22 +146,22 @@ module UpsPickup
       rescue Savon::SOAP::Fault => fault
         @client_response = fault
       rescue Savon::Error => error
-        @clien_response = error   
-      end  
+        @clien_response = error
+      end
       build_response
     end
 
     def build_response
       if success?
-        @response = UpsPickup::PickupCreationSuccess.new(@client_response) 
+        @response = UpsPickup::PickupCreationSuccess.new(@client_response)
         self.grand_total_of_all_charge = @response.grand_total_of_all_charge
       elsif soap_fault?
         fault_response = UpsPickup::FaultResponse.new(@client,@client_response)
         @error = UpsPickup::ErrorResponse.new(fault_response.response)
-      end  
+      end
     end
-    
-    
+
+
 
   end
 end
